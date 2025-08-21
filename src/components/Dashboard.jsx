@@ -1,0 +1,140 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
+
+function Dashboard() {
+  const navigate = useNavigate();
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch employees on component mount
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch("/api/employees");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setEmployees(data);
+    } catch (err) {
+      setError(`Failed to fetch employees: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateEmployee = () => {
+    navigate("/create-employee");
+  };
+
+  const handleEditEmployee = (employeeId) => {
+    // Navigate to Edit Employee Page (to be implemented later)
+    console.log(`Navigate to Edit Employee Page for ID: ${employeeId}`);
+  };
+
+  const handleDeleteEmployee = (employeeId) => {
+    // Initiate deactivate employee process (to be implemented later)
+    console.log(`Deactivate employee with ID: ${employeeId}`);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const formatSalary = (salary) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(salary);
+  };
+
+  return (
+    <div className="dashboard-container">
+      {/* Header */}
+      <header className="dashboard-header">
+        <h1>Employee Management Portal</h1>
+        <button className="create-employee-btn" onClick={handleCreateEmployee}>
+          Create Employee
+        </button>
+      </header>
+
+      {/* Main Content */}
+      <main className="dashboard-main">
+        {loading && <div className="loading">Loading employees...</div>}
+
+        {error && <div className="error-message">{error}</div>}
+
+        {!loading && !error && employees.length === 0 && (
+          <div className="no-data">No data available</div>
+        )}
+
+        {!loading && !error && employees.length > 0 && (
+          <div className="employee-table-container">
+            <table className="employee-table">
+              <thead>
+                <tr>
+                  <th>Employee ID</th>
+                  <th>Name</th>
+                  <th>Date of Joining</th>
+                  <th>Department</th>
+                  <th>Salary</th>
+                  <th>Manager ID</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((employee) => (
+                  <tr key={employee.id}>
+                    <td>{employee.id}</td>
+                    <td>{employee.name}</td>
+                    <td>{formatDate(employee.dateOfJoining)}</td>
+                    <td>{employee.department}</td>
+                    <td>{formatSalary(employee.salary)}</td>
+                    <td>{employee.managerId}</td>
+                    <td>
+                      <span
+                        className={`status ${employee.status
+                          .toLowerCase()
+                          .replace("_", "-")}`}
+                      >
+                        {employee.status}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="action-buttons">
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEditEmployee(employee.id)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDeleteEmployee(employee.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+export default Dashboard;
