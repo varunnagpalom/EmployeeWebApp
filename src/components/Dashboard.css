@@ -168,6 +168,71 @@
   background-color: #c82333;
 }
 
+.edit-btn:disabled,
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-btn:disabled:hover,
+.delete-btn:disabled:hover {
+  background-color: inherit;
+}
+
+/* Success Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal h2 {
+  color: #28a745;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.modal-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.close-btn:hover {
+  background-color: #218838;
+}
+
 /* Responsive design */
 @media (max-width: 1200px) {
   .employee-table {
@@ -212,5 +277,10 @@
   .delete-btn {
     padding: 0.4rem 0.8rem;
     font-size: 0.7rem;
+  }
+
+  .modal-btn {
+    width: 100%;
+    max-width: 200px;
   }
 }

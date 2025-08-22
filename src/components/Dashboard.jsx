@@ -7,6 +7,8 @@ function Dashboard() {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Fetch employees on component mount
   useEffect(() => {
@@ -44,9 +46,31 @@ function Dashboard() {
     }
   };
 
-  const handleDeleteEmployee = (employeeId) => {
-    // Initiate deactivate employee process (to be implemented later)
-    console.log(`Deactivate employee with ID: ${employeeId}`);
+  const handleDeleteEmployee = async (employeeId) => {
+    try {
+      setDeleteLoading(true);
+      setError(null);
+
+      const response = await fetch(`/api/employees/${employeeId}`, {
+        method: "DELETE",
+      });
+
+      if (response.status === 204) {
+        // Success - show modal and refresh employee list
+        setShowSuccessModal(true);
+        await fetchEmployees(); // Refresh the employee list
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (err) {
+      setError(`Failed to delete employee. Please try again. ${err.message}`);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
   };
 
   const formatDate = (dateString) => {
@@ -124,8 +148,9 @@ function Dashboard() {
                         <button
                           className="delete-btn"
                           onClick={() => handleDeleteEmployee(employee.id)}
+                          disabled={deleteLoading}
                         >
-                          Delete
+                          {deleteLoading ? "Deleting..." : "Delete"}
                         </button>
                       </div>
                     </td>
@@ -136,6 +161,23 @@ function Dashboard() {
           </div>
         )}
       </main>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Employee Deleted Successfully</h2>
+            <div className="modal-actions">
+              <button
+                className="modal-btn close-btn"
+                onClick={handleCloseSuccessModal}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
