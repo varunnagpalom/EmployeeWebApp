@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import CreateEmployee from '../components/CreateEmployee'
-import { renderWithRouter } from '../test/utils.jsx'
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import CreateEmployee from "../components/CreateEmployee";
+import { renderWithRouter } from "../test/utils.jsx";
 
 // Mock the useNavigate hook
 const mockNavigate = vi.fn();

@@ -1,15 +1,15 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
-import Dashboard from '../components/Dashboard'
-import CreateEmployee from '../components/CreateEmployee'
-import EditEmployee from '../components/EditEmployee'
-import { mockEmployees, mockFetchSuccess } from '../test/utils.jsx'
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { render } from "@testing-library/react";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "../components/Dashboard";
+import CreateEmployee from "../components/CreateEmployee";
+import EditEmployee from "../components/EditEmployee";
+import { mockEmployees, mockFetchSuccess } from "../test/utils.jsx";
 
 // Helper function to render components with routing
-const renderWithRouter = (initialEntries = ['/']) => {
+const renderWithRouter = (initialEntries = ["/"]) => {
   return render(
     <MemoryRouter initialEntries={initialEntries}>
       <Routes>
@@ -82,7 +82,7 @@ describe("App Integration Tests", () => {
     it("shows no employee data message when navigating directly to edit page", async () => {
       // Test EditEmployee component with router but without state
       render(
-        <MemoryRouter initialEntries={['/edit-employee']} initialIndex={0}>
+        <MemoryRouter initialEntries={["/edit-employee"]} initialIndex={0}>
           <Routes>
             <Route path="/edit-employee" element={<EditEmployee />} />
           </Routes>
@@ -91,7 +91,11 @@ describe("App Integration Tests", () => {
 
       // The edit employee component should render
       expect(screen.getByText("No Employee Data")).toBeInTheDocument();
-      expect(screen.getByText("Please select an employee from the dashboard to edit.")).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "Please select an employee from the dashboard to edit."
+        )
+      ).toBeInTheDocument();
     });
   });
 
