@@ -37,8 +37,11 @@ function Dashboard() {
   };
 
   const handleEditEmployee = (employeeId) => {
-    // Navigate to Edit Employee Page (to be implemented later)
-    console.log(`Navigate to Edit Employee Page for ID: ${employeeId}`);
+    // Find the employee data and navigate to Edit Employee Page
+    const employee = employees.find((emp) => emp.id === employeeId);
+    if (employee) {
+      navigate("/edit-employee", { state: { employee } });
+    }
   };
 
   const handleDeleteEmployee = (employeeId) => {
